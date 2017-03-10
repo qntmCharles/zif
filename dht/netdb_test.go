@@ -146,17 +146,18 @@ func TestNetDBInsertAndLen(t *testing.T) {
 }
 
 func TestInsert(t *testing.T) {
-	num := 200
 	db := dbWithRandomAddress(t)
 
-	for i := 0; i < num; i++ {
-		entry := randomEntry(t)
+	entry := randomEntry(t)
 
-		db.Insert(entry)
+	_, err := db.Insert(entry)
 
-		if l, _ := db.Len(); l != i+1 {
-			t.Fatalf("Insert failed, len: %d, num: %d", l, num)
-		}
+	if err != nil {
+		t.Fatalf(err.Error())
+	}
+
+	if l, _ := db.Len(); l != 1 {
+		t.Fatalf("Insert failed, database len: %d", l)
 	}
 }
 

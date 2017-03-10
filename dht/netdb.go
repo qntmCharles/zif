@@ -306,6 +306,7 @@ func (ndb *NetDB) InsertSeed(entry Address, seed Address) error {
 }
 
 // Inserts an entry into both the routing table and the database
+// Returns number of affected entries and error
 func (ndb *NetDB) Insert(entry Entry) (int64, error) {
 	err := entry.Verify()
 
