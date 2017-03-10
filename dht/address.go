@@ -20,21 +20,27 @@ import (
 const AddressBinarySize = 20
 const AddressVersion = 0
 
+// Raw is 20 bytes. It is the BLAKE2(SHA3(publicKey)), with the blake2
+// digest size set to 20 bytes.
+// Encoded contains zif address.
 type Address struct {
 	Raw     []byte
 	Encoded string
 }
 
 // Generates an Address from a PublicKey.
-func NewAddress(key []byte) (addr Address) {
-	addr = Address{}
+func NewAddress(key []byte) (Address, error) {
+	addr := Address{}
 	addr.Generate(key)
 
-	return
+	_, err := addr.String()
+
+	return addr, err
 }
 
 // Returns Address.Bytes Base58 encoded and prepended with a Z.
 // Base58 removes ambiguous characters, reducing the chances of address confusion.
+// Address.Encoded will be set if not already. Otherwise it's current value is returned.
 func (a *Address) String() (string, error) {
 	if len(a.Encoded) > 0 {
 		return a.Encoded, nil
